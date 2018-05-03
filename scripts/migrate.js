@@ -12,3 +12,17 @@ let umzug = new Umzug({
   upName: 'up',
   downName: 'down'
 })
+
+function logUmzugEvent(eventName) {
+  return (name, migration) => {
+    console.log(`${name} ${eventName}`)
+  }
+}
+//event listeners to log events
+umzug.on('migrating', logUmzugEvent('migrating'))
+umzug.on('migrated', logUmzugEvent('migrated'))
+umzug.on('reverting', logUmzugEvent('reverting'))
+umzug.on('reverted', logUmzugEvent('reverted'))
+
+//this will run your migrations
+umzug.up().then(console.log('all migrations done'))
