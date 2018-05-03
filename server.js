@@ -11,6 +11,7 @@ server.get('/', (req, res) => {
   res.send('Invoicing App')
 })
 
-server.listen(PORT, ()=>
-console.log(`App running on localhost:${PORT}`))
-
+server.listen(PORT, () =>
+// eslint-disable-next-line no-console
+  console.log(`App running on localhost:${PORT}`)
+)
