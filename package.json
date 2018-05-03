@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/Zoealexandra/invoicing-app.git",
-  "author": "sarah-mclaughlin <sarahmclaughlin0@gmail.com>",
+  "author": "zoealexandra <zoebarron@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^2.0.1",
