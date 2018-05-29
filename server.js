@@ -18,17 +18,20 @@ server.listen(PORT, () =>
   console.log(`App running on localhost:${PORT}`)
 )
 
+function isEmpty(str) {
+  return !str || 0 === str.length;
+}
 
 server.post('/register', (req,res) => {
   //ensure no empty fields
-  if(isEmpty(req.body.name) || isEmpty(req.body.email) || isEmpty(req.body.company_name) || isEmpty(req.body.password) ) {
+  if(!(req.body.name) || !(req.body.email) || !(req.body.company_name) || !(req.body.password)) {
     return res.json({
       'status': false,
       'message': 'All fields are required'
     })
   }
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-    let db = new sqlite3.Database('./database/invoiceingApp.db')
+    let db = new sqlite3.Database('./database/invoicingApp.db')
     let sql = `INSERT INTO users(name,email,company_name,password) VALUES('${
       req.body.name
     }','${req.body.email}','${req.body.company_name}','${hash}')`
@@ -42,6 +45,36 @@ server.post('/register', (req,res) => {
         })
       }
     })
-    db.close
+    db.close()
+  })
+})
+
+server.post('/login', (req, res) => {
+  let db = new sqlite3.Database('./database/InvoicingApp.db')
+  let sql = `SELECT * from users where email='${req.body.email}'`
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      throw err
+    }
+    db.close()
+    if (rows.length == 0) {
+      return res.json({
+        status: false,
+        message: 'Sorry, wrong email'
+      })
+    }
+    let user = rows[0]
+    let authenticated = bcrypt.compareSync(req.body.password, user.password)
+    delete user.password
+    if (authenticated) {
+      return res.json({
+        status:true,
+        user
+      })
+    }
+    return res.json({
+      status: false,
+      message: 'Wrong Password, please retry'
+    })
   })
 })
