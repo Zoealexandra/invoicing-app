@@ -54,7 +54,7 @@ server.post('/register', (req,res) => {
   })
 })
 
-
+//logging in to the application
 server.post('/login', (req, res) => {
   let db = new sqlite3.Database('./database/InvoicingApp.db')
   let sql = `SELECT * from users where email='${req.body.email}'`
@@ -85,6 +85,7 @@ server.post('/login', (req, res) => {
   })
 })
 
+//Adding a new invoice
 server.post('/invoice', multipartMiddleware, (req, res) => {
   if (isEmpty(req.body.name)) {
     return res.json({
@@ -123,6 +124,7 @@ server.post('/invoice', multipartMiddleware, (req, res) => {
   })
 })
 
+// search transactions by user
 server.get('/invoice/user/:user_id', multipartMiddleware, (req, res) => {
   let db = new sqlite3.Database('./database/InvoicingApp.db')
   let sql = `SELECT * FROM invoices LEFT JOIN transactions ON invoices.id=transactions.invoice_id WHERE user_id='${req.params.user_id}'`
