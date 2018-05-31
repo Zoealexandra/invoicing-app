@@ -7,6 +7,7 @@
     </nav>
 </template>
 <script>
+/* eslint-disable */
 import SideNav from './SideNav'
 export default {
   name: "Header",
