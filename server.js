@@ -13,7 +13,7 @@ server.use(bodyParser.json())
 //Multiparty middleware
 const multipartMiddleware = multipart();
 
-server.get('/', (req, res) => {
+server.get('/', function(req, res){
   res.send('Invoicing App')
 })
 
@@ -49,16 +49,16 @@ server.post('/register', function(req, res) {
   })
 })
 
-server.listen(PORT, () =>
+server.listen(PORT, function () {
 // eslint-disable-next-line no-console
-  console.log(`App running on localhost:${PORT}`)
-)
+console.log(`App running on localhost:${PORT}`)
+})
 
 function isEmpty(str) {
   return !str || 0 === str.length;
 }
 
-server.post('/register', (req,res) => {
+server.post('/register', function (req,res) {
   //ensure no empty fields
   if(!(req.body.name) || !(req.body.email) || !(req.body.company_name) || !(req.body.password)) {
     return res.json({
@@ -66,12 +66,12 @@ server.post('/register', (req,res) => {
       'message': 'All fields are required'
     })
   }
-  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+  bcrypt.hash(req.body.password, saltRounds, function(err, hash){
     let db = new sqlite3.Database('./database/invoicingApp.db')
     let sql = `INSERT INTO users(name,email,company_name,password) VALUES('${
       req.body.name
     }','${req.body.email}','${req.body.company_name}','${hash}')`
-    db.run(sql, err => {
+    db.run(sql, function(err) {
       if (err) {
         throw err
       } else {
@@ -87,10 +87,10 @@ server.post('/register', (req,res) => {
 })
 
 //logging in to the application
-server.post('/login', (req, res) => {
+server.post('/login', function(req, res) {
   let db = new sqlite3.Database('./database/InvoicingApp.db')
   let sql = `SELECT * from users where email='${req.body.email}'`
-  db.all(sql, [], (err, rows) => {
+  db.all(sql, [], function(err, rows){
     if (err) {
       throw err
     }
@@ -118,7 +118,7 @@ server.post('/login', (req, res) => {
 })
 
 //Adding a new invoice
-/* server.post('/invoice', multipartMiddleware, (req, res) => {
+/* server.post('/invoice', multipartMiddleware, function(req, res){
   if (isEmpty(req.body.name)) {
     return res.json({
       status:false,
@@ -209,10 +209,10 @@ app.post("/invoice", multipartMiddleware, function(req, res) {
 })
 
 // search transactions by user
-server.get('/invoice/user/:user_id', multipartMiddleware, (req, res) => {
+server.get('/invoice/user/:user_id', multipartMiddleware, function (req, res){
   let db = new sqlite3.Database('./database/InvoicingApp.db')
   let sql = `SELECT * FROM invoices LEFT JOIN transactions ON invoices.id=transactions.invoice_id WHERE user_id='${req.params.user_id}'`
-  db.all(sql, [], (err, rows) => {
+  db.all(sql, [], function (err, rows) {
     if (err) {
       throw err
     }
@@ -227,7 +227,7 @@ server.get('/invoice/user/:user_id/:invoice_id', multipartMiddleware, function(r
   let db =  new sqlite3.Database('./database/InvoicingApp.db')
   let sql = `SELECT * FROM invoices LEFT JOIN tranactions ON 
   invoices.id=transactions.invoice_id WHERE user_id=${req.params.user_id}' AND invoice_id=${req.params.invoice_id}'`
-  db.all(sql, [], (err, rows) => {
+  db.all(sql, [], function (err, rows) {
     if (err) {
       throw err
     }
