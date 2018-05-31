@@ -56,24 +56,25 @@ export default {
         }
       },
       login() {
-  const formData = new FormData();
-  formData.append("email", this.model.email);
-  formData.append("password", this.model.password);
-  this.loading = "Signing in";
-  // Post to server
-  axios.post("http://localhost:3128/login", formData).then(res => {
-    // Post a status message
-    this.loading = "";
-    if (res.data.status == true) {
-      // now send the user to the next route
-      this.$router.push({
-        name: "Dashboard",
-        params: { user: res.data.user }
-      });
-    } else {
-      this.status = res.data.message;
-    }
-  });
+      const formData = new FormData()
+      formData.append("email", this.model.email)
+      formData.append("password", this.model.password)
+      this.loading = "Signing in"
+      // Post to server
+      axios.post("http://localhost:3128/login", formData).then(res => {
+        // Post a status message
+        this.loading = ""
+        if (res.data.status == true) {
+          // now send the user to the next route
+          this.$router.push({
+            name: "Dashboard",
+            params: { user: res.data.user }
+          })
+        } else {
+          this.status = res.data.message;
+        }
+      })
     }
   }
 }
+</script>
